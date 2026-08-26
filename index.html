@@ -103,6 +103,18 @@ section{margin-top:56px}
 .btn{display:inline-block;font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.74rem;letter-spacing:.09em;text-transform:uppercase;font-weight:600;text-decoration:none;color:var(--accent-ink);border:1px solid var(--line-strong);padding:9px 15px;border-radius:4px;background:var(--surface)}
 .btn:hover{border-color:var(--accent);color:var(--accent)}
 
+/* dashboard receipt */
+.receipt{margin:26px 0 0;padding:0;display:grid;grid-template-columns:230px 1fr;gap:24px;align-items:start}
+.receipt img{width:100%;display:block;border-radius:6px;border:1px solid var(--line-strong)}
+.receipt .notes{padding-top:2px}
+.receipt .notes .eyebrow{display:block;margin-bottom:11px}
+.receipt ul{margin:0;padding:0;list-style:none;display:grid;gap:9px}
+.receipt li{font-size:.92rem;line-height:1.45;color:var(--ink-soft);padding-left:15px;position:relative}
+.receipt li::before{content:"";position:absolute;left:0;top:.62em;width:7px;height:1px;background:var(--accent)}
+.receipt li b{color:var(--ink);font-weight:700}
+.receipt figcaption{grid-column:1/-1;margin-top:4px;font-size:.8rem;color:var(--muted)}
+@media(max-width:600px){.receipt{grid-template-columns:1fr;gap:16px}.receipt img{max-width:230px}}
+
 /* scrubber */
 figure.scrub{margin:28px 0 0;padding:0}
 .track-outer{position:relative;padding-top:24px}
@@ -227,6 +239,21 @@ ul.craft .k{font-size:.94rem;color:var(--ink-soft)}
   </div>
   <p>Look at those numbers again. 1.3 million views, 3,900 likes, 20 comments. That works out to a like rate of 0.3%.</p>
   <p>If you posted this video, those numbers would look like a flop. Easy to take it down by the weekend and never think about it again.</p>
+  <figure class="receipt">
+    <img src="dashboard.jpg" alt="Shop dashboard for the video: 1.3M views, 3.9K likes, 20 comments, $150.7K creator GMV in 30 days, 394 competing videos in 7 days, $1.5M product revenue in 14 days">
+    <div class="notes">
+      <span class="eyebrow">what to look at</span>
+      <ul>
+        <li><b>1.3M views against 3.9K likes and 20 comments.</b> Almost nobody clapped.</li>
+        <li><b>$150.7K</b> to her in 30 days, and the line is still going up.</li>
+        <li><b>394</b> other women posted this same bottle inside 7 days.</li>
+        <li><b>$1.5M</b> for the product in 14 days, up 15.9%.</li>
+        <li>The <b>AD</b> tag, bottom left of the video. Money went behind it once it started selling.</li>
+      </ul>
+    </div>
+    <figcaption>The dashboard behind every number on this page.</figcaption>
+  </figure>
+
   <p>It did not flop. Women bought. And once it started selling, money went behind it to push it in front of more people, which is exactly what we do the moment one of yours starts working. Your commission keeps running the whole time it spends.</p>
   <div class="note">
     <span class="eyebrow">so</span>
