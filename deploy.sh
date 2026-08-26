@@ -38,14 +38,20 @@ echo "  your public link:"
 echo "  $URL"
 echo "================================================================"
 echo
-echo "waiting for it to go live..."
+# verify the NEW file is live, not just that some page returns 200.
+# a status check alone always passes after the first deploy and tells you nothing.
+STAMP=$(shasum -a 1 index.html | cut -c1-12)
+echo "waiting for this exact build to go live (fingerprint $STAMP)..."
 for i in $(seq 1 30); do
-  CODE=$(curl -s -o /dev/null -w "%{http_code}" "$URL" || echo 000)
-  if [ "$CODE" = "200" ]; then
-    echo "LIVE - $URL"
-    echo "open it in a private/incognito window to confirm it needs no login."
+  LIVE=$(curl -s -H "Cache-Control: no-cache" "$URL?cb=$i$$" | shasum -a 1 | cut -c1-12)
+  if [ "$LIVE" = "$STAMP" ]; then
+    echo
+    echo "LIVE and matching your local file - $URL"
+    echo
+    echo "your browser will still show the old copy for up to 10 minutes."
+    echo "hard-reload with Cmd+Shift+R, or open $URL?v=$STAMP"
     exit 0
   fi
   sleep 10
 done
-echo "still building. check $URL in a minute."
+echo "pages is still rebuilding. re-check $URL in a minute with Cmd+Shift+R."
