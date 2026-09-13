@@ -8,52 +8,22 @@
 
 <style>
 :root{
-  --ground:#FAF6F4;
-  --surface:#F3EAE6;
-  --surface-2:#EDE0DB;
-  --ink:#26191F;
-  --ink-soft:#463640;
-  --muted:#7C6873;
-  --line:#E3D5CF;
-  --line-strong:#CBB6AE;
-  --accent:#B32547;
+  --ground:#FBF8F4;
+  --surface:#F6EFE8;
+  --surface-2:#EFE5DB;
+  --ink:#2B2027;
+  --ink-soft:#4A3C44;
+  --muted:#857280;
+  --line:#E8DCD1;
+  --line-strong:#D5C5B8;
+  --accent:#B02A4C;
   --accent-ink:#8E1A38;
-  --accent-wash:rgba(179,37,71,.08);
-  --good:#1F6B52;
-  --good-wash:rgba(31,107,82,.08);
+  --accent-wash:rgba(176,42,76,.07);
+  --good:#216B53;
+  --good-wash:rgba(33,107,83,.08);
 }
-@media (prefers-color-scheme:dark){
-  :root:not([data-theme="light"]){
-    --ground:#161016;
-    --surface:#1F1620;
-    --surface-2:#291D29;
-    --ink:#F4E9EC;
-    --ink-soft:#D6C4CB;
-    --muted:#A08D98;
-    --line:#33242F;
-    --line-strong:#4A3542;
-    --accent:#FF7191;
-    --accent-ink:#FF93AB;
-    --accent-wash:rgba(255,113,145,.11);
-    --good:#5FC79E;
-    --good-wash:rgba(95,199,158,.1);
-  }
-}
-:root[data-theme="dark"]{
-  --ground:#161016;
-  --surface:#1F1620;
-  --surface-2:#291D29;
-  --ink:#F4E9EC;
-  --ink-soft:#D6C4CB;
-  --muted:#A08D98;
-  --line:#33242F;
-  --line-strong:#4A3542;
-  --accent:#FF7191;
-  --accent-ink:#FF93AB;
-  --accent-wash:rgba(255,113,145,.11);
-  --good:#5FC79E;
-  --good-wash:rgba(95,199,158,.1);
-}
+
+
 
 *{box-sizing:border-box}
 body{
@@ -80,8 +50,8 @@ strong{font-weight:700;color:var(--ink)}
 header.top{padding:58px 0 0}
 .kicker{display:flex;gap:13px;align-items:baseline;flex-wrap:wrap;margin-bottom:24px}
 .badge{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;font-weight:600;background:var(--accent);color:#fff;padding:5px 9px;border-radius:3px}
-:root[data-theme="dark"] .badge{color:#1A0E14}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .badge{color:#1A0E14}}
+
+
 h1 .accent{color:var(--accent);font-style:italic;font-variation-settings:"SOFT" 40,"WONK" 1}
 .subhead{margin-top:20px;max-width:56ch}
 
