@@ -1,0 +1,485 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>The Ingredient Teardown</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,700&family=Karla:wght@300;400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+
+<style>
+:root{
+  --ground:#FBF8F4;
+  --surface:#F6EFE8;
+  --surface-2:#EFE5DB;
+  --ink:#2B2027;
+  --ink-soft:#4A3C44;
+  --muted:#78636F;
+  --line:#E8DCD1;
+  --line-strong:#D5C5B8;
+  --accent:#B02A4C;
+  --accent-ink:#8E1A38;
+  --accent-wash:rgba(176,42,76,.07);
+  --good:#216B53;
+  --good-wash:rgba(33,107,83,.08);
+}
+
+
+
+*{box-sizing:border-box}
+body{
+  margin:0;background:var(--ground);color:var(--ink);
+  font-family:"Karla",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:17px;line-height:1.62;-webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:760px;margin:0 auto;padding:0 22px 90px}
+
+h1,h2,h3,h4{font-family:"Fraunces",Georgia,serif;text-wrap:balance;margin:0;font-weight:500}
+h1{font-size:clamp(2.3rem,7.2vw,4rem);line-height:1.03;font-weight:700;letter-spacing:-.022em;font-variation-settings:"SOFT" 20,"WONK" 1}
+h2{font-size:clamp(1.46rem,3.6vw,2rem);line-height:1.14;letter-spacing:-.014em;font-weight:600}
+h3{font-size:1.16rem;line-height:1.3;font-weight:600;letter-spacing:-.006em}
+h4{font-size:.98rem;font-weight:600}
+p{margin:0 0 1.05em}
+a{color:var(--accent-ink)}
+strong{font-weight:700;color:var(--ink)}
+
+.eyebrow{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.68rem;letter-spacing:.17em;text-transform:uppercase;color:var(--muted);font-weight:500}
+.lede{font-size:1.15rem;color:var(--ink-soft);line-height:1.56}
+.quiet{color:var(--muted)}
+.mono{font-family:"IBM Plex Mono",ui-monospace,monospace;font-variant-numeric:tabular-nums}
+
+header.top{padding:58px 0 0}
+.kicker{display:flex;gap:13px;align-items:baseline;flex-wrap:wrap;margin-bottom:24px}
+.badge{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;font-weight:600;background:var(--accent);color:#fff;padding:5px 9px;border-radius:3px}
+
+
+h1 .accent{color:var(--accent);font-style:italic;font-variation-settings:"SOFT" 40,"WONK" 1}
+.subhead{margin-top:20px;max-width:56ch}
+
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(124px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);margin:34px 0 8px;border-radius:5px;overflow:hidden}
+.stat{background:var(--surface);padding:14px 15px 13px}
+.stat .n{font-family:"IBM Plex Mono",ui-monospace,monospace;font-variant-numeric:tabular-nums;font-size:1.38rem;font-weight:600;letter-spacing:-.02em;display:block;line-height:1.15}
+.stat .l{font-size:.69rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-top:5px;display:block;font-weight:500}
+.stat.hot .n{color:var(--accent)}
+.src{font-size:.78rem;color:var(--muted)}
+
+section{margin-top:56px}
+.sec-head{margin-bottom:6px}
+.sec-head .eyebrow{display:block;margin-bottom:9px}
+
+/* video */
+.player{margin:30px 0 0}
+.player video{width:100%;max-width:330px;display:block;border-radius:8px;border:1px solid var(--line);background:#000}
+.player .row{display:flex;gap:16px;align-items:center;flex-wrap:wrap;margin-top:13px}
+.btn{display:inline-block;font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.74rem;letter-spacing:.09em;text-transform:uppercase;font-weight:600;text-decoration:none;color:var(--accent-ink);border:1px solid var(--line-strong);padding:9px 15px;border-radius:4px;background:var(--surface)}
+.btn:hover{border-color:var(--accent);color:var(--accent)}
+
+.craft .v.down{color:var(--muted)}
+.sub{margin:34px 0 6px;font-size:1.2rem}
+
+.chain .q{display:block;margin-top:7px;font-family:"Fraunces",Georgia,serif;font-style:italic;font-size:.92rem;color:var(--muted);border-left:2px solid var(--line-strong);padding-left:12px}
+
+/* the chain */
+.chain{list-style:none;margin:26px 0;padding:0;counter-reset:c}
+.chain li{position:relative;padding:0 0 0 46px;margin:0 0 16px}
+.chain li::before{counter-increment:c;content:counter(c);position:absolute;left:0;top:1px;
+  width:28px;height:28px;border-radius:50%;background:var(--surface-2);border:1px solid var(--line-strong);
+  color:var(--accent);font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.78rem;font-weight:600;
+  display:flex;align-items:center;justify-content:center}
+.chain li::after{content:"";position:absolute;left:14px;top:32px;bottom:-16px;width:1px;background:var(--line)}
+.chain li:last-child::after{display:none}
+.chain b{display:block;color:var(--ink);font-size:1rem;margin-bottom:2px}
+.chain span{font-size:.94rem;line-height:1.5;color:var(--ink-soft)}
+.chain li.use::before{background:var(--accent);color:var(--ground);border-color:var(--accent)}
+.chain li.use b::after{content:"say this one";margin-left:9px;font-family:"IBM Plex Mono",ui-monospace,monospace;
+  font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);font-weight:600}
+
+/* dashboard receipt */
+.receipt{margin:26px 0 0;padding:0;display:grid;grid-template-columns:230px 1fr;gap:24px;align-items:start}
+.receipt img{width:100%;display:block;border-radius:6px;border:1px solid var(--line-strong)}
+.receipt .notes{padding-top:2px}
+.receipt .notes .eyebrow{display:block;margin-bottom:11px}
+.receipt ul{margin:0;padding:0;list-style:none;display:grid;gap:9px}
+.receipt li{font-size:.92rem;line-height:1.45;color:var(--ink-soft);padding-left:15px;position:relative}
+.receipt li::before{content:"";position:absolute;left:0;top:.62em;width:7px;height:1px;background:var(--accent)}
+.receipt li b{color:var(--ink);font-weight:700}
+.receipt figcaption{grid-column:1/-1;margin-top:4px;font-size:.8rem;color:var(--muted)}
+@media(max-width:600px){.receipt{grid-template-columns:1fr;gap:16px}.receipt img{max-width:230px}}
+
+/* scrubber */
+figure.scrub{margin:28px 0 0;padding:0}
+.track-outer{position:relative;padding-top:24px}
+.track{position:relative;height:50px;background:var(--surface);border:1px solid var(--line);border-radius:4px;overflow:hidden}
+.zone{position:absolute;top:0;bottom:0}
+.zone.hook{background:var(--accent-wash);border-right:1px solid var(--line-strong)}
+.zone.prod{background:linear-gradient(180deg,var(--accent-wash),transparent)}
+.cut{position:absolute;top:0;bottom:0;width:1px;background:var(--line-strong)}
+.cut::after{content:"";position:absolute;top:-7px;left:-2px;width:5px;height:5px;background:var(--muted);border-radius:50%}
+.pin{position:absolute;top:0;bottom:0;width:2px;background:var(--accent)}
+.zlabel{position:absolute;top:5px;font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.62rem;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);font-weight:500}
+.scrub-legend{display:flex;flex-wrap:wrap;gap:5px 20px;margin-top:13px;font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.7rem;color:var(--muted)}
+.scrub-legend b{color:var(--ink);font-weight:600}
+figcaption{margin-top:13px;font-size:.88rem;color:var(--muted);line-height:1.5}
+
+/* hook strip */
+.strip{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin:28px 0 18px}
+.shot{margin:0}
+.shot img{width:100%;display:block;border-radius:4px;border:1px solid var(--line);background:var(--surface-2)}
+.shot .t{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.65rem;color:var(--accent);margin-top:7px;display:block;font-weight:600;font-variant-numeric:tabular-nums}
+.shot .d{font-size:.77rem;color:var(--muted);line-height:1.35;display:block;margin-top:2px}
+@media(max-width:560px){.strip{grid-template-columns:repeat(2,1fr);gap:12px}}
+
+/* beats */
+.beat{display:grid;grid-template-columns:84px 1fr;gap:0 24px;padding:25px 0;border-top:1px solid var(--line)}
+.beat:first-of-type{border-top:1px solid var(--line-strong)}
+.tc{font-family:"IBM Plex Mono",ui-monospace,monospace;font-variant-numeric:tabular-nums;font-size:.81rem;font-weight:600;color:var(--accent);padding-top:.3em;letter-spacing:-.01em}
+.tc span{display:block;color:var(--muted);font-weight:400;font-size:.73rem}
+.beat-body>*:last-child{margin-bottom:0}
+.beat h3{margin-bottom:.5em}
+@media(max-width:600px){.beat{grid-template-columns:1fr;gap:0}.tc{padding-top:0;margin-bottom:9px}.tc span{display:inline;margin-left:6px}}
+
+.said{margin:0 0 1.05em;padding:11px 0 11px 17px;border-left:2px solid var(--accent);font-family:"Fraunces",Georgia,serif;font-size:1.05rem;font-style:italic;color:var(--ink-soft);line-height:1.45;font-variation-settings:"SOFT" 30}
+
+.note{background:var(--surface);border:1px solid var(--line);border-radius:5px;padding:19px 21px;margin:25px 0}
+.note>*:last-child{margin-bottom:0}
+.note .eyebrow{display:block;margin-bottom:9px}
+.note.hi{background:var(--good-wash);border-color:var(--good)}
+.note.hi .eyebrow{color:var(--good)}
+
+/* her words */
+.herwords{margin:22px 0;padding:0;list-style:none;display:grid;gap:9px}
+.herwords li{font-family:"Fraunces",Georgia,serif;font-style:italic;font-size:1.02rem;color:var(--ink-soft);padding-left:19px;position:relative;line-height:1.4}
+.herwords li::before{content:"";position:absolute;left:0;top:.62em;width:9px;height:1px;background:var(--accent)}
+.herwords li b{font-style:normal;font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.72rem;color:var(--muted);font-weight:500;display:block;margin-top:2px;letter-spacing:.04em}
+
+/* craft */
+ul.craft{list-style:none;padding:0;margin:22px 0}
+ul.craft li{display:grid;grid-template-columns:122px 1fr;gap:0 20px;align-items:baseline;padding:12px 0;border-top:1px solid var(--line)}
+ul.craft li:last-child{border-bottom:1px solid var(--line)}
+ul.craft .v{font-family:"IBM Plex Mono",ui-monospace,monospace;font-variant-numeric:tabular-nums;font-weight:600;font-size:1rem;color:var(--accent);letter-spacing:-.02em}
+ul.craft .k{font-size:.94rem;color:var(--ink-soft)}
+@media(max-width:520px){ul.craft li{grid-template-columns:1fr;gap:3px}}
+
+/* shot list */
+.plan{border:1px solid var(--line);border-radius:6px;overflow:hidden;margin:24px 0}
+.plan-head{background:var(--surface-2);padding:16px 20px;border-bottom:1px solid var(--line)}
+.plan-head h3{margin-bottom:4px}
+.plan-head p{margin:0;font-size:.88rem;color:var(--muted);line-height:1.45}
+.step{display:grid;grid-template-columns:74px 1fr;gap:0 18px;padding:16px 20px;border-top:1px solid var(--line);background:var(--surface)}
+.step:first-of-type{border-top:0}
+.step .s{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.72rem;font-weight:600;color:var(--accent);padding-top:.22em;font-variant-numeric:tabular-nums}
+.step .b>*:last-child{margin-bottom:0}
+.step h4{margin-bottom:.34em}
+.step p{margin:0 0 .55em;font-size:.95rem;color:var(--ink-soft);line-height:1.5}
+.spec{margin:.5em 0 0;padding:0}
+.spec dt{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.6rem;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--accent);font-weight:600;margin-top:11px}
+.spec dt:first-child{margin-top:2px}
+.spec dd{margin:3px 0 0;font-size:.94rem;line-height:1.52;color:var(--ink-soft)}
+.spec dd b{color:var(--ink)}
+@media(max-width:560px){.step{grid-template-columns:1fr;gap:0;padding:15px 17px}.step .s{margin-bottom:7px}}
+
+.spine{display:flex;flex-wrap:wrap;gap:7px;align-items:center;margin:20px 0 4px;font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.75rem}
+.spine i{font-style:normal;background:var(--surface-2);border:1px solid var(--line);padding:6px 10px;border-radius:3px;color:var(--ink-soft)}
+.spine s{text-decoration:none;color:var(--accent)}
+
+.closer{margin-top:60px;padding:38px 0 0;border-top:2px solid var(--accent)}
+.closer blockquote{margin:0;font-family:"Fraunces",Georgia,serif;font-size:clamp(1.3rem,3.6vw,1.8rem);line-height:1.28;font-weight:500;letter-spacing:-.015em;text-wrap:balance;font-variation-settings:"SOFT" 30,"WONK" 1}
+.sig{margin-top:20px;font-size:.85rem;color:var(--muted)}
+
+::selection{background:var(--accent);color:var(--ground)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:2px}
+</style><div class="wrap">
+
+<header class="top">
+  <div class="kicker">
+    <span class="badge">Breakdown 16</span>
+    <span class="eyebrow">nuora creator library</span>
+  </div>
+
+  <h1>She never says<br>it works. She lets<br><span class="accent">five strangers</span><br>prove it.</h1>
+
+  <p class="lede subhead">Ninety seconds. Five ingredients. The tub does not appear until seventy-eight percent of the way through, and the link lands with three seconds left. And at the very end she tells a whole group of people not to buy it, which is the part that makes everybody else buy it.</p>
+
+  <p class="src">@naturopathicapothecary &middot; sleep gummies &middot; 1 minute 30 &middot; one take, phone, shelf behind her</p>
+</header>
+
+<section>
+  <div class="sec-head">
+    <span class="eyebrow">watch it first</span>
+    <h2>Ninety seconds, and then read the rest of this page</h2>
+  </div>
+
+  <div class="player">
+    <video controls playsinline preload="none" poster="poster16.jpg">
+      <source src="napo.mp4" type="video/mp4">
+      Your browser cannot play this here.
+    </video>
+    <div class="row">
+      <span class="src">This one is the opposite of our last breakdown. No story, no secret, no family. It sells entirely on ingredients, and it still holds the product back to the very end.</span>
+    </div>
+  </div>
+
+  <div class="stats">
+    <div class="stat hot"><span class="n">78%</span><span class="l">before the tub appears</span></div>
+    <div class="stat hot"><span class="n">96%</span><span class="l">before the link</span></div>
+    <div class="stat"><span class="n">5</span><span class="l">ingredients named</span></div>
+    <div class="stat"><span class="n">4</span><span class="l">pieces of proof on screen</span></div>
+    <div class="stat"><span class="n">1</span><span class="l">group told not to buy</span></div>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head">
+    <span class="eyebrow">the whole idea in one minute</span>
+    <h2>Other people do the claiming</h2>
+  </div>
+
+  <ol class="chain">
+    <li><b>It opens on a game, not a problem</b><span>People are taking two gummies and trying to stay awake for an hour. Nobody makes it past thirty. The brand never says it works. Strangers losing a challenge says it instead.</span></li>
+    <li><b>The credential arrives second, not first</b><span>She says she is a holistic wellness coach at seven seconds, once, after the hook has already landed. She never says it again.</span></li>
+    <li><b>The first fact is what is missing</b><span>There is no melatonin in these, and she makes that the reason they work. Before she has praised a single ingredient, she has taken the obvious competitor off the table.</span></li>
+    <li><b>Five ingredients, one picture each</b><span>GABA is your brain's off switch. L-theanine puts you in the state right before you fall asleep. No chemistry, one image per name.</span></li>
+    <li><b>She tries it after the ingredients, not before</b><span>After seeing that ingredient list I knew I had to try it myself. Her own experience arrives at fifty-two seconds, as the result of the evidence instead of a substitute for it.</span></li>
+    <li class="use"><b>She disqualifies people out loud</b><span>If you are on an SSRI this is probably not for you. Everybody who is not on one now believes every other word she said.</span></li>
+  </ol>
+</section>
+
+<section>
+  <div class="sec-head">
+    <span class="eyebrow">second by second</span>
+    <h2>Where everything sits</h2>
+  </div>
+
+  <div class="strip">
+    <figure class="shot"><img src="s1.jpg" alt="the challenge clip playing above her"><span class="t">0:00</span><span class="d">Someone face down on a bed, thirty minutes later</span></figure>
+    <figure class="shot"><img src="s2.jpg" alt="real reviews on screen"><span class="t">0:11</span><span class="d">Real reviews, pointed at, never read out</span></figure>
+    <figure class="shot"><img src="s3.jpg" alt="no melatonin"><span class="t">0:13</span><span class="d">What is not in it, before what is</span></figure>
+    <figure class="shot"><img src="s7.jpg" alt="the tub, finally"><span class="t">1:10</span><span class="d">The tub, at last</span></figure>
+  </div>
+
+  <div class="beat">
+    <div class="tc">0:00<span>the game</span></div>
+    <div class="beat-body">
+      <h3>A challenge, not a claim.</h3>
+      <p class="said">"There is an internet challenge where people are taking two of these sleep gummies and trying to stay awake for an hour, but nobody can make it past thirty minutes."</p>
+      <p>She is not telling you it works. She is telling you other people are losing a game, and the only way to lose is if it works. Above her head a clip plays of a woman face down on a bed with the words thirty minutes later. Nobody has promised you a result and you already believe it.</p>
+    </div>
+  </div>
+
+  <div class="beat">
+    <div class="tc">0:07<span>the badge</span></div>
+    <div class="beat-body">
+      <h3>The credential, once, and never again.</h3>
+      <p class="said">"As a holistic wellness coach, let me explain exactly why that is happening."</p>
+      <p>It arrives at seven seconds, once the hook has already landed, and it runs six words. It is there to license the next sixty seconds of ingredient talk, and then it disappears.</p>
+    </div>
+  </div>
+
+  <div class="beat">
+    <div class="tc">0:11<span>the proof she did not make</span></div>
+    <div class="beat-body">
+      <h3>And why the reviews look like this.</h3>
+      <p>Real reviews fill the screen for about two seconds. She never reads one out. Nobody can pause a TikTok fast enough to read them properly, and that is the point. Your eye registers a wall of five stars and moves on.</p>
+    </div>
+  </div>
+
+  <div class="beat">
+    <div class="tc">0:13<span>the door closing</span></div>
+    <div class="beat-body">
+      <h3>She starts with what is <em>not</em> in it.</h3>
+      <p class="said">"First things first, there is no melatonin in these gummies, and that is actually a good thing, because this is the reason they do not leave you feeling groggy and hungover the next morning."</p>
+      <p>This is the strongest move in the whole video. Everybody watching has tried melatonin and woken up foggy. In one sentence she names the ingredient they already distrust, takes it off the table, and explains the grogginess they have all felt. The product has not been praised yet and the competition is already gone.</p>
+    </div>
+  </div>
+
+  <div class="beat">
+    <div class="tc">0:23<span>one picture each</span></div>
+    <div class="beat-body">
+      <h3>Five ingredients, five images, no chemistry.</h3>
+      <ul class="herwords">
+        <li>Valerian root works on GABA, which is basically your brain's off switch<b>0:26</b></li>
+        <li>L-theanine promotes alpha brain waves, which is the state right before you fall asleep<b>0:31</b></li>
+        <li>Magnesium glycinate, the most calming form of magnesium<b>0:36</b></li>
+        <li>Passionflower, which calms the nervous system<b>0:40</b></li>
+        <li>5-HTP is a precursor to melatonin, so instead of getting synthetic melatonin from a supplement, this is giving your body what it needs to make its own<b>0:44</b></li>
+      </ul>
+      <p>Every one is a name, then one plain sentence, then move. No dosage, no studies read aloud, no mg. The longest explanation in the whole video is eighteen words.</p>
+    </div>
+  </div>
+
+  <div class="beat">
+    <div class="tc">0:33<span>evidence on screen</span></div>
+    <div class="beat-body">
+      <h3>The proof is shown, not read.</h3>
+      <div class="strip" style="grid-template-columns:repeat(3,1fr)">
+        <figure class="shot"><img src="s4.jpg" alt="alpha brain wave chart"><span class="t">0:33</span><span class="d">Alpha brain waves, water versus l&#8209;theanine</span></figure>
+        <figure class="shot"><img src="s5.jpg" alt="highlighted study"><span class="t">0:37</span><span class="d">A real trial, title highlighted in yellow</span></figure>
+        <figure class="shot"><img src="s6.jpg" alt="the 5-HTP pathway"><span class="t">0:46</span><span class="d">Tryptophan to 5&#8209;HTP to melatonin</span></figure>
+      </div>
+      <p>Three pieces of evidence appear for about two seconds each while she keeps talking. She never cites them and never explains them. They are there so your eye sees that real evidence sits behind the sentence your ear is hearing.</p>
+    </div>
+  </div>
+
+  <div class="beat">
+    <div class="tc">0:52<span>finally, her</span></div>
+    <div class="beat-body">
+      <h3>Her own night comes after the evidence.</h3>
+      <p class="said">"After seeing that ingredient list, I knew I had to try it myself. So I took two of these last night, and that is some of the best sleep I have had in a really long time."</p>
+      <p>The easy version of this video opens here. She spends forty-five seconds earning it first, so when it arrives it reads as the conclusion of everything before it rather than the reason for it. And it is one night, last night, which is small enough to be true.</p>
+    </div>
+  </div>
+
+  <div class="beat">
+    <div class="tc">1:13<span>the disqualifier</span></div>
+    <div class="beat-body">
+      <h3>She tells people not to buy it.</h3>
+      <p class="said">"With one caveat. If you are on an SSRI, this is probably not for you, because this has 5-HTP, and both SSRIs and 5-HTP boost serotonin."</p>
+      <p>She gives away a slice of her own audience, on purpose, seventeen seconds before the link. A person who will take money off the table is a person telling the truth, and everybody who is not on an SSRI has just been handed a reason to trust the whole video. This is the single most valuable second in it.</p>
+    </div>
+  </div>
+
+  <div class="beat">
+    <div class="tc">1:27<span>the link</span></div>
+    <div class="beat-body">
+      <h3>Three seconds left.</h3>
+      <p class="said">"I am going to drop these down below in the orange cart, and feel free to comment if you have any questions."</p>
+      <p>No urgency, no discount, no sell-out line, no code. The ask is flat and it is over in three seconds, because all the work was already done.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head">
+    <span class="eyebrow">measured, not guessed</span>
+    <h2>The numbers</h2>
+  </div>
+  <ul class="craft">
+    <li><span class="v">1:10</span><span class="k">before the branded tub is on screen, out of 1:30</span></li>
+    <li><span class="v">1:27</span><span class="k">before the link is mentioned, which is 96% of the way through</span></li>
+    <li><span class="v">18 words</span><span class="k">the longest single explanation of any ingredient</span></li>
+    <li><span class="v">2 sec</span><span class="k">how long each piece of evidence stays on screen</span></li>
+    <li><span class="v">6 words</span><span class="k">the entire credential, used once</span></li>
+    <li><span class="v">1 night</span><span class="k">the size of her personal claim</span></li>
+  </ul>
+</section>
+
+<section>
+  <div class="sec-head">
+    <span class="eyebrow">the big idea</span>
+    <h2>She removes before she adds</h2>
+  </div>
+  <p>Almost every supplement video starts by piling on reasons to buy. This one starts by taking a reason away. No melatonin, and here is why that matters. Only once the obvious alternative is gone does she start building, and by then the woman watching has nowhere else to go.</p>
+  <p>Then she never asks to be believed. The challenge is other people. The reviews are other people. The chart and the trial are other people. All she offers of her own is one night of sleep, and she offers it last.</p>
+  <div class="note hi">
+    <span class="eyebrow">what to steal</span>
+    <p>The honest caveat. We have never once told a woman that our product might not be for her, and it is the cheapest trust we could buy. Everything else in this video is technique. That part is character, and she gets paid for it.</p>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head">
+    <span class="eyebrow">yours</span>
+    <h2>The same shape, for the capsules</h2>
+  </div>
+
+  <div class="plan">
+    <div class="plan-head">
+      <h3>Ninety seconds, one take, whatever room you are in</h3>
+      <p>No story needed for this one. This is the other format, and it works on a phone with nothing behind you but a shelf.</p>
+    </div>
+
+    <div class="step">
+      <div class="s">0:00</div>
+      <div class="b">
+        <h4>Open on what other people are doing</h4>
+        <p>Not on your own problem. On what you noticed, or a question that keeps turning up, or what women keep saying in the comments under a video like this.</p>
+        <dl class="spec">
+          <dt>why it works</dt><dd>A claim from you has to be believed. What is happening to other people only has to be watched.</dd>
+          <dt>making it yours</dt><dd>You could open on the reviews, or on what somebody asked you, or on what you keep seeing women say about bloating by the afternoon. Whatever is actually true for you.</dd>
+        </dl>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="s">0:08</div>
+      <div class="b">
+        <h4>Say what is <em>not</em> in it first</h4>
+        <p>This is her no melatonin, and ours is better than hers.</p>
+        <dl class="spec">
+          <dt>say it plainly</dt><dd>There is no pineapple flavouring in this. Almost every supplement uses the flavour, and the enzyme only exists in the stem. Those are not the same.</dd>
+          <dt>why it works</dt><dd>She has probably already bought one of the others, and this explains, without blaming her, why it did nothing.</dd>
+        </dl>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="s">0:20</div>
+      <div class="b">
+        <h4>Four ingredients, one picture each</h4>
+        <p>Stay with these four and leave the rest out, because a shorter list is easier for her to hold on to.</p>
+        <dl class="spec">
+          <dt>bromelain</dt><dd>The enzyme from the pineapple stem. It breaks the film down first, so everything else can get through.</dd>
+          <dt>berberine</dt><dd>The part that does the work once it is through.</dd>
+          <dt>black pepper</dt><dd>On its own, your body absorbs almost none of the berberine. This is what lets it in.</dd>
+          <dt>ashwagandha</dt><dd>For the cortisol side of it.</dd>
+          <dt>the rule</dt><dd>One sentence each, then move. Her longest was eighteen words.</dd>
+        </dl>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="s">0:45</div>
+      <div class="b">
+        <h4>Your own experience, after the ingredients</h4>
+        <p>Not before. It lands as the conclusion instead of the pitch.</p>
+        <dl class="spec">
+          <dt>keep it small</dt><dd>She claimed one night. Claim one real moment, and say honestly that the first weeks were slow, because the body needs a long time to come back and every other brand lies about that.</dd>
+        </dl>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="s">1:10</div>
+      <div class="b">
+        <h4>Tell somebody not to buy it</h4>
+        <p>The one beat nobody else on our team has used.</p>
+        <dl class="spec">
+          <dt>say it like this</dt><dd>If you are pregnant or nursing, this one is not for you, check with your doctor first.</dd>
+          <dt>or</dt><dd>If you want a fix in three days, this is honestly not it. Mine took weeks before it held.</dd>
+          <dt>why it works</dt><dd>You are taking money off the table in front of her. Everybody left now believes the rest of it.</dd>
+        </dl>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="s">1:25</div>
+      <div class="b">
+        <h4>The link, flat, three seconds, nothing after it</h4>
+        <p>No urgency, no sell-out line, no code.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="spine">
+    <i>other people</i><s>&rarr;</s><i>what is missing</i><s>&rarr;</s><i>four ingredients</i><s>&rarr;</s><i>your night</i><s>&rarr;</s><i>who should not buy</i><s>&rarr;</s><i>link</i>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head">
+    <span class="eyebrow">before you film</span>
+    <h2>Three that matter</h2>
+  </div>
+  <div class="note">
+    <p><strong>Never against a doctor.</strong> Being told it was normal when it was not is yours to say, and it is strong. Saying a prescription does not work, or that you stopped going, is the line that gets a video pulled.</p>
+    <p><strong>No sell-out lines.</strong> She never says these are running low, and she did not need to.</p>
+    <p><strong>Helps support.</strong> That is the phrase for any effect. Your own experience is yours, the viewer's body is not.</p>
+  </div>
+</section>
+
+<div class="closer">
+  <blockquote>She spent eighty-three seconds making the case and three seconds asking. Everybody else does it the other way round.</blockquote>
+  <p class="sig">Breakdown 16 &middot; nuora creator library &middot; for our creators only</p>
+</div>
+
+</div>
