@@ -1,0 +1,474 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>The Spec Duel</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,700&family=Karla:wght@300;400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+
+<style>
+:root{
+  --ground:#FBF8F4;
+  --surface:#F6EFE8;
+  --surface-2:#EFE5DB;
+  --ink:#2B2027;
+  --ink-soft:#4A3C44;
+  --muted:#78636F;
+  --line:#E8DCD1;
+  --line-strong:#D5C5B8;
+  --accent:#B02A4C;
+  --accent-ink:#8E1A38;
+  --accent-wash:rgba(176,42,76,.07);
+  --good:#216B53;
+  --good-wash:rgba(33,107,83,.08);
+}
+
+
+
+*{box-sizing:border-box}
+body{
+  margin:0;background:var(--ground);color:var(--ink);
+  font-family:"Karla",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:17px;line-height:1.62;-webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:760px;margin:0 auto;padding:0 22px 90px}
+
+h1,h2,h3,h4{font-family:"Fraunces",Georgia,serif;text-wrap:balance;margin:0;font-weight:500}
+h1{font-size:clamp(2.3rem,7.2vw,4rem);line-height:1.03;font-weight:700;letter-spacing:-.022em;font-variation-settings:"SOFT" 20,"WONK" 1}
+h2{font-size:clamp(1.46rem,3.6vw,2rem);line-height:1.14;letter-spacing:-.014em;font-weight:600}
+h3{font-size:1.16rem;line-height:1.3;font-weight:600;letter-spacing:-.006em}
+h4{font-size:.98rem;font-weight:600}
+p{margin:0 0 1.05em}
+a{color:var(--accent-ink)}
+strong{font-weight:700;color:var(--ink)}
+
+.eyebrow{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.68rem;letter-spacing:.17em;text-transform:uppercase;color:var(--muted);font-weight:500}
+.lede{font-size:1.15rem;color:var(--ink-soft);line-height:1.56}
+.quiet{color:var(--muted)}
+.mono{font-family:"IBM Plex Mono",ui-monospace,monospace;font-variant-numeric:tabular-nums}
+
+header.top{padding:58px 0 0}
+.kicker{display:flex;gap:13px;align-items:baseline;flex-wrap:wrap;margin-bottom:24px}
+.badge{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;font-weight:600;background:var(--accent);color:#fff;padding:5px 9px;border-radius:3px}
+
+
+h1 .accent{color:var(--accent);font-style:italic;font-variation-settings:"SOFT" 40,"WONK" 1}
+.subhead{margin-top:20px;max-width:56ch}
+
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(124px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);margin:34px 0 8px;border-radius:5px;overflow:hidden}
+.stat{background:var(--surface);padding:14px 15px 13px}
+.stat .n{font-family:"IBM Plex Mono",ui-monospace,monospace;font-variant-numeric:tabular-nums;font-size:1.38rem;font-weight:600;letter-spacing:-.02em;display:block;line-height:1.15}
+.stat .l{font-size:.69rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-top:5px;display:block;font-weight:500}
+.stat.hot .n{color:var(--accent)}
+.src{font-size:.78rem;color:var(--muted)}
+
+section{margin-top:56px}
+.sec-head{margin-bottom:6px}
+.sec-head .eyebrow{display:block;margin-bottom:9px}
+
+/* video */
+.player{margin:30px 0 0}
+.player video{width:100%;max-width:330px;display:block;border-radius:8px;border:1px solid var(--line);background:#000}
+.player .row{display:flex;gap:16px;align-items:center;flex-wrap:wrap;margin-top:13px}
+.btn{display:inline-block;font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.74rem;letter-spacing:.09em;text-transform:uppercase;font-weight:600;text-decoration:none;color:var(--accent-ink);border:1px solid var(--line-strong);padding:9px 15px;border-radius:4px;background:var(--surface)}
+.btn:hover{border-color:var(--accent);color:var(--accent)}
+
+.craft .v.down{color:var(--muted)}
+.sub{margin:34px 0 6px;font-size:1.2rem}
+
+.chain .q{display:block;margin-top:7px;font-family:"Fraunces",Georgia,serif;font-style:italic;font-size:.92rem;color:var(--muted);border-left:2px solid var(--line-strong);padding-left:12px}
+
+/* the chain */
+.chain{list-style:none;margin:26px 0;padding:0;counter-reset:c}
+.chain li{position:relative;padding:0 0 0 46px;margin:0 0 16px}
+.chain li::before{counter-increment:c;content:counter(c);position:absolute;left:0;top:1px;
+  width:28px;height:28px;border-radius:50%;background:var(--surface-2);border:1px solid var(--line-strong);
+  color:var(--accent);font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.78rem;font-weight:600;
+  display:flex;align-items:center;justify-content:center}
+.chain li::after{content:"";position:absolute;left:14px;top:32px;bottom:-16px;width:1px;background:var(--line)}
+.chain li:last-child::after{display:none}
+.chain b{display:block;color:var(--ink);font-size:1rem;margin-bottom:2px}
+.chain span{font-size:.94rem;line-height:1.5;color:var(--ink-soft)}
+.chain li.use::before{background:var(--accent);color:var(--ground);border-color:var(--accent)}
+.chain li.use b::after{content:"say this one";margin-left:9px;font-family:"IBM Plex Mono",ui-monospace,monospace;
+  font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);font-weight:600}
+
+/* dashboard receipt */
+.receipt{margin:26px 0 0;padding:0;display:grid;grid-template-columns:230px 1fr;gap:24px;align-items:start}
+.receipt img{width:100%;display:block;border-radius:6px;border:1px solid var(--line-strong)}
+.receipt .notes{padding-top:2px}
+.receipt .notes .eyebrow{display:block;margin-bottom:11px}
+.receipt ul{margin:0;padding:0;list-style:none;display:grid;gap:9px}
+.receipt li{font-size:.92rem;line-height:1.45;color:var(--ink-soft);padding-left:15px;position:relative}
+.receipt li::before{content:"";position:absolute;left:0;top:.62em;width:7px;height:1px;background:var(--accent)}
+.receipt li b{color:var(--ink);font-weight:700}
+.receipt figcaption{grid-column:1/-1;margin-top:4px;font-size:.8rem;color:var(--muted)}
+@media(max-width:600px){.receipt{grid-template-columns:1fr;gap:16px}.receipt img{max-width:230px}}
+
+/* scrubber */
+figure.scrub{margin:28px 0 0;padding:0}
+.track-outer{position:relative;padding-top:24px}
+.track{position:relative;height:50px;background:var(--surface);border:1px solid var(--line);border-radius:4px;overflow:hidden}
+.zone{position:absolute;top:0;bottom:0}
+.zone.hook{background:var(--accent-wash);border-right:1px solid var(--line-strong)}
+.zone.prod{background:linear-gradient(180deg,var(--accent-wash),transparent)}
+.cut{position:absolute;top:0;bottom:0;width:1px;background:var(--line-strong)}
+.cut::after{content:"";position:absolute;top:-7px;left:-2px;width:5px;height:5px;background:var(--muted);border-radius:50%}
+.pin{position:absolute;top:0;bottom:0;width:2px;background:var(--accent)}
+.zlabel{position:absolute;top:5px;font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.62rem;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);font-weight:500}
+.scrub-legend{display:flex;flex-wrap:wrap;gap:5px 20px;margin-top:13px;font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.7rem;color:var(--muted)}
+.scrub-legend b{color:var(--ink);font-weight:600}
+figcaption{margin-top:13px;font-size:.88rem;color:var(--muted);line-height:1.5}
+
+/* hook strip */
+.strip{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin:28px 0 18px}
+.shot{margin:0}
+.shot img{width:100%;display:block;border-radius:4px;border:1px solid var(--line);background:var(--surface-2)}
+.shot .t{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.65rem;color:var(--accent);margin-top:7px;display:block;font-weight:600;font-variant-numeric:tabular-nums}
+.shot .d{font-size:.77rem;color:var(--muted);line-height:1.35;display:block;margin-top:2px}
+@media(max-width:560px){.strip{grid-template-columns:repeat(2,1fr);gap:12px}}
+
+/* beats */
+.beat{display:grid;grid-template-columns:84px 1fr;gap:0 24px;padding:25px 0;border-top:1px solid var(--line)}
+.beat:first-of-type{border-top:1px solid var(--line-strong)}
+.tc{font-family:"IBM Plex Mono",ui-monospace,monospace;font-variant-numeric:tabular-nums;font-size:.81rem;font-weight:600;color:var(--accent);padding-top:.3em;letter-spacing:-.01em}
+.tc span{display:block;color:var(--muted);font-weight:400;font-size:.73rem}
+.beat-body>*:last-child{margin-bottom:0}
+.beat h3{margin-bottom:.5em}
+@media(max-width:600px){.beat{grid-template-columns:1fr;gap:0}.tc{padding-top:0;margin-bottom:9px}.tc span{display:inline;margin-left:6px}}
+
+.said{margin:0 0 1.05em;padding:11px 0 11px 17px;border-left:2px solid var(--accent);font-family:"Fraunces",Georgia,serif;font-size:1.05rem;font-style:italic;color:var(--ink-soft);line-height:1.45;font-variation-settings:"SOFT" 30}
+
+.note{background:var(--surface);border:1px solid var(--line);border-radius:5px;padding:19px 21px;margin:25px 0}
+.note>*:last-child{margin-bottom:0}
+.note .eyebrow{display:block;margin-bottom:9px}
+.note.hi{background:var(--good-wash);border-color:var(--good)}
+.note.hi .eyebrow{color:var(--good)}
+
+/* her words */
+.herwords{margin:22px 0;padding:0;list-style:none;display:grid;gap:9px}
+.herwords li{font-family:"Fraunces",Georgia,serif;font-style:italic;font-size:1.02rem;color:var(--ink-soft);padding-left:19px;position:relative;line-height:1.4}
+.herwords li::before{content:"";position:absolute;left:0;top:.62em;width:9px;height:1px;background:var(--accent)}
+.herwords li b{font-style:normal;font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.72rem;color:var(--muted);font-weight:500;display:block;margin-top:2px;letter-spacing:.04em}
+
+/* craft */
+ul.craft{list-style:none;padding:0;margin:22px 0}
+ul.craft li{display:grid;grid-template-columns:122px 1fr;gap:0 20px;align-items:baseline;padding:12px 0;border-top:1px solid var(--line)}
+ul.craft li:last-child{border-bottom:1px solid var(--line)}
+ul.craft .v{font-family:"IBM Plex Mono",ui-monospace,monospace;font-variant-numeric:tabular-nums;font-weight:600;font-size:1rem;color:var(--accent);letter-spacing:-.02em}
+ul.craft .k{font-size:.94rem;color:var(--ink-soft)}
+@media(max-width:520px){ul.craft li{grid-template-columns:1fr;gap:3px}}
+
+/* shot list */
+.plan{border:1px solid var(--line);border-radius:6px;overflow:hidden;margin:24px 0}
+.plan-head{background:var(--surface-2);padding:16px 20px;border-bottom:1px solid var(--line)}
+.plan-head h3{margin-bottom:4px}
+.plan-head p{margin:0;font-size:.88rem;color:var(--muted);line-height:1.45}
+.step{display:grid;grid-template-columns:74px 1fr;gap:0 18px;padding:16px 20px;border-top:1px solid var(--line);background:var(--surface)}
+.step:first-of-type{border-top:0}
+.step .s{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.72rem;font-weight:600;color:var(--accent);padding-top:.22em;font-variant-numeric:tabular-nums}
+.step .b>*:last-child{margin-bottom:0}
+.step h4{margin-bottom:.34em}
+.step p{margin:0 0 .55em;font-size:.95rem;color:var(--ink-soft);line-height:1.5}
+.spec{margin:.5em 0 0;padding:0}
+.spec dt{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.6rem;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--accent);font-weight:600;margin-top:11px}
+.spec dt:first-child{margin-top:2px}
+.spec dd{margin:3px 0 0;font-size:.94rem;line-height:1.52;color:var(--ink-soft)}
+.spec dd b{color:var(--ink)}
+@media(max-width:560px){.step{grid-template-columns:1fr;gap:0;padding:15px 17px}.step .s{margin-bottom:7px}}
+
+.spine{display:flex;flex-wrap:wrap;gap:7px;align-items:center;margin:20px 0 4px;font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.75rem}
+.spine i{font-style:normal;background:var(--surface-2);border:1px solid var(--line);padding:6px 10px;border-radius:3px;color:var(--ink-soft)}
+.spine s{text-decoration:none;color:var(--accent)}
+
+.closer{margin-top:60px;padding:38px 0 0;border-top:2px solid var(--accent)}
+.closer blockquote{margin:0;font-family:"Fraunces",Georgia,serif;font-size:clamp(1.3rem,3.6vw,1.8rem);line-height:1.28;font-weight:500;letter-spacing:-.015em;text-wrap:balance;font-variation-settings:"SOFT" 30,"WONK" 1}
+.sig{margin-top:20px;font-size:.85rem;color:var(--muted)}
+
+::selection{background:var(--accent);color:var(--ground)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:2px}
+</style><div class="wrap">
+
+<header class="top">
+  <div class="kicker">
+    <span class="badge">Breakdown 17</span>
+    <span class="eyebrow">nuora creator library</span>
+  </div>
+
+  <h1>Two people argue.<br>One of them loses.<br><span class="accent">Neither one ever<br>sells you.</span></h1>
+
+  <p class="lede subhead">Fifty-five seconds, two friends, two bottles, and an argument about whose is better. There is no story and no founder and no pain point. By the end one of them says forget mine, we are getting yours, and that sentence does all of the selling. This is the easiest format on this whole site to film, and it is the one that fits our capsules best.</p>
+
+  <p class="src">@drizzledeals &middot; beetroot capsules &middot; 55 seconds &middot; one room, one phone, two people</p>
+</header>
+
+<section>
+  <div class="sec-head">
+    <span class="eyebrow">watch it first</span>
+    <h2>Fifty-five seconds, then read the rest of this</h2>
+  </div>
+
+  <div class="player">
+    <video controls playsinline preload="none" poster="poster17.jpg">
+      <source src="drizzle.mp4" type="video/mp4">
+      Your browser cannot play this here.
+    </video>
+    <div class="row">
+      <span class="src">One note before you watch. The language in it is theirs and it is not the part to copy. The structure is.</span>
+    </div>
+  </div>
+
+  <div class="stats">
+    <div class="stat hot"><span class="n">0:00</span><span class="l">straight into the argument</span></div>
+    <div class="stat"><span class="n">4</span><span class="l">rounds, one number each</span></div>
+    <div class="stat"><span class="n">6 sec</span><span class="l">the dissolve test, on a timer</span></div>
+    <div class="stat hot"><span class="n">93%</span><span class="l">before the link</span></div>
+    <div class="stat"><span class="n">0</span><span class="l">times anybody says buy this</span></div>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head">
+    <span class="eyebrow">the whole idea in one minute</span>
+    <h2>She is not choosing whether to buy. She is choosing which one.</h2>
+  </div>
+
+  <p>Our own survey says it plainly. Women in our list have already bought several of these. One of our creators says out loud in her video that she bought about five kinds, and another that she spent around five hundred dollars in two years. She has a shelf of bottles that did not work.</p>
+
+  <p>Every other format on this site is built to convince a woman that a problem is worth solving. This one skips that completely, because she solved for that two years and four bottles ago. It walks straight into the only question she still has, which is which one of these is actually different, and it answers it by letting two people argue it out in front of her.</p>
+
+  <ol class="chain">
+    <li><b>It opens mid-sentence</b><span>My veins are better. No setup, no hello, no problem. You are listening to two people who were already talking, and nobody likes to walk away from an argument.</span></li>
+    <li><b>Both of them already take it</b><span>Well, I take beetroot. And I also take beetroot. So what is the difference? Neither one is a sceptic, so nobody is being converted. The whole video is one question and it is the question she already has.</span></li>
+    <li class="use"><b>A test anybody can repeat at home</b><span>Both drop a capsule in water with a timer running on screen. One glass turns red in six seconds, the other stays clear. No claim, no citation, no words at all for six seconds.</span></li>
+    <li><b>Four rounds, one number each</b><span>Milligrams, then black pepper, then capsule count, then price. Each round is two words on screen above each head. Nobody explains why.</span></li>
+    <li><b>The loser concedes</b><span>Honestly bro, you are right, your veins do pop way more. Forget mine, we are getting yours. The person who was arguing against it is the one who tells her to buy.</span></li>
+  </ol>
+</section>
+
+<section>
+  <div class="sec-head">
+    <span class="eyebrow">second by second</span>
+    <h2>Where everything sits</h2>
+  </div>
+
+  <div class="strip">
+    <figure class="shot"><img src="a1.jpg" alt="two forearms"><span class="t">0:00</span><span class="d">Two forearms, mid&#8209;argument</span></figure>
+    <figure class="shot"><img src="a3.jpg" alt="the dissolve test with a timer"><span class="t">0:08</span><span class="d">Two glasses, one timer running</span></figure>
+    <figure class="shot"><img src="a5.jpg" alt="black pepper comparison on screen"><span class="t">0:26</span><span class="d">15mg black pepper, versus none</span></figure>
+    <figure class="shot"><img src="a7.jpg" alt="the concession"><span class="t">0:49</span><span class="d">Forget mine, we are getting yours</span></figure>
+  </div>
+
+  <div class="beat">
+    <div class="tc">0:00<span>no opening</span></div>
+    <div class="beat-body">
+      <h3>You arrive in the middle.</h3>
+      <p class="said">"My veins are better. My veins are definitely better. Well, I take beetroot. And I also take beetroot. So what is the difference?"</p>
+      <p>Five seconds, four lines, and the whole premise is set. There is no hook in the normal sense. Two people disagreeing is the hook, because a disagreement has an outcome and you want to know what it is.</p>
+    </div>
+  </div>
+
+  <div class="beat">
+    <div class="tc">0:05<span>the demo</span></div>
+    <div class="beat-body">
+      <h3>Six seconds of silence and a timer.</h3>
+      <p>Both drop a capsule into a glass of water. A timer runs in the corner. At two and a half seconds one glass is already going red and the other is still clear. Then he says it out loud.</p>
+      <p class="said">"Hold on, how is yours already red? Mine has not done anything yet."</p>
+      <p>This is the strongest second in the video. It is proof she can run herself in her own kitchen, it needs no trust in either of them, and it is the only kind of evidence that survives a woman who has already been disappointed four times.</p>
+    </div>
+  </div>
+
+  <div class="beat">
+    <div class="tc">0:18<span>round one</span></div>
+    <div class="beat-body">
+      <h3>One number, two words on screen.</h3>
+      <p class="said">"Mine has over 1,300 milligrams of beetroot." "Mine has over 2,000 milligrams of beetroot."</p>
+      <p>Above each head the screen says 1300mg and 2000mg. No explanation of why more is better. The comparison carries the whole meaning.</p>
+    </div>
+  </div>
+
+  <div class="beat">
+    <div class="tc">0:25<span>round two, the one for us</span></div>
+    <div class="beat-body">
+      <h3>Black pepper decides it.</h3>
+      <p class="said">"None of ours have black pepper extract, so I guess we are both low-key trash." "Actually, mine comes with 15 milligrams of black pepper."</p>
+      <p>Read that again, because it is our ingredient and our argument. A beetroot brand just won a fight on black pepper, and the same sentence is sitting unused in our capsules. The round even opens with both of them admitting they are the same, which makes the reveal land harder.</p>
+    </div>
+  </div>
+
+  <div class="beat">
+    <div class="tc">0:31<span>rounds three and four</span></div>
+    <div class="beat-body">
+      <h3>Capsule count, then price.</h3>
+      <p>Sixty against ninety, on screen as two numbers. Then cheaper. Four rounds in total and the whole comparison is over in twenty seconds, because every round is one fact and nobody defends their own.</p>
+    </div>
+  </div>
+
+  <div class="beat">
+    <div class="tc">0:38<span>the concession</span></div>
+    <div class="beat-body">
+      <h3>The one who loses is the one who closes.</h3>
+      <p class="said">"Honestly bro, you are right. Your veins do pop way more. Forget mine, we are going to get yours."</p>
+      <p>Nobody in this video ever recommends the product. The argument simply ends, and the person who was defending the other bottle gives it up. She watched somebody change their mind in front of her, which is far harder to argue with than being told.</p>
+    </div>
+  </div>
+
+  <div class="beat">
+    <div class="tc">0:51<span>the link</span></div>
+    <div class="beat-body">
+      <h3>Four seconds left.</h3>
+      <p>The link is mentioned once with four seconds to go. They also add a sale and a sell-out line, and those two are the parts we leave behind. We only say stock is low when it genuinely is.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head">
+    <span class="eyebrow">measured</span>
+    <h2>The numbers</h2>
+  </div>
+  <ul class="craft">
+    <li><span class="v">0 sec</span><span class="k">of setup before the argument starts</span></li>
+    <li><span class="v">6 sec</span><span class="k">of the dissolve test, with no talking over it</span></li>
+    <li><span class="v">20 sec</span><span class="k">for all four comparison rounds together</span></li>
+    <li><span class="v">2 words</span><span class="k">the longest on-screen label in any round</span></li>
+    <li><span class="v">0:51</span><span class="k">before the link, out of 0:55</span></li>
+    <li><span class="v">2 people</span><span class="k">the only equipment that matters</span></li>
+  </ul>
+</section>
+
+<section>
+  <div class="sec-head">
+    <span class="eyebrow">our data</span>
+    <h2>Why this one fits her better than any other format</h2>
+  </div>
+
+  <p>From 54,555 surveys, the biggest stated struggle for both of our products is the same: gut, bloating and weight. For the capsules that is 4,643 women. For the gummies the real driver is the intimate side, and odor and freshness alone is 10,187 women. These are not women who need convincing that the problem exists.</p>
+
+  <p>What they say when we ask what they already tried is a list. Probiotics. Boric acid. Washes. Cutting out dairy, then gluten. Apple cider vinegar. Fibre. A doctor who said it was stress. Every one of those is a bottle or a bill that did not hold.</p>
+
+  <div class="note hi">
+    <span class="eyebrow">the whole point</span>
+    <p>A story video asks her to feel what she already feels. A comparison video answers the only question she has left. For the woman with four dead bottles in the cupboard, the second one is worth more, and nobody on our team has made one yet.</p>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head">
+    <span class="eyebrow">yours</span>
+    <h2>The same shape, for our capsules</h2>
+  </div>
+
+  <div class="plan">
+    <div class="plan-head">
+      <h3>Fifty-five seconds, two people, one kitchen</h3>
+      <p>You need a friend, a sister, your mum, or anybody who will stand next to you and disagree. Everything else you already have.</p>
+    </div>
+
+    <div class="step">
+      <div class="s">0:00</div>
+      <div class="b">
+        <h4>Open on the disagreement, not on you</h4>
+        <p>Both of you already take a gut supplement. Nobody is a beginner and nobody is sceptical.</p>
+        <dl class="spec">
+          <dt>say it like this</dt><dd>Mine actually works. Well, mine works too. So what is the difference?</dd>
+          <dt>why it works</dt><dd>She is not being sold to, she is watching two people answer the question she is already asking.</dd>
+          <dt>making it yours</dt><dd>You could open on whatever is true for the two of you. A day you both stopped bloating by the afternoon, a trip, a dinner. Keep it to four lines.</dd>
+        </dl>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="s">0:05</div>
+      <div class="b">
+        <h4>The glass of water, with a timer running</h4>
+        <p>This is the beat to spend your effort on, and ours is better than theirs, because our whole story is a layer that will not dissolve.</p>
+        <dl class="spec">
+          <dt>the demo</dt><dd>Two capsules, two glasses of warm water, a stopwatch on screen. Film it in one unbroken shot with no talking, and let her watch.</dd>
+          <dt>why ours is stronger</dt><dd>Biofilm is a layer that nothing gets through. A capsule she can watch break open in water is the same idea in her own kitchen, and she can repeat it with whatever is in her own cupboard.</dd>
+          <dt>film it first</dt><dd>Run it once before you record properly, so you know what actually happens with both. Whatever you show has to be what really happened.</dd>
+        </dl>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="s">0:15</div>
+      <div class="b">
+        <h4>Four rounds, one fact each, two words on screen</h4>
+        <p>Keep every round to one sentence and move. These four are ours and all of them are true.</p>
+        <dl class="spec">
+          <dt>round one, the stem</dt><dd>Pineapple stem enzyme, against pineapple flavouring. Almost every other bottle uses the flavour, and the enzyme only exists in the stem. This is our 1300 against 2000.</dd>
+          <dt>round two, black pepper</dt><dd>Black pepper, against none. Berberine on its own barely absorbs, so without the pepper most of it goes straight through you. This is the exact round that won their video.</dd>
+          <dt>round three, the step nobody else has</dt><dd>Most of them only add good bacteria. Ours breaks the film down first, so what you take can actually reach the wall underneath.</dd>
+          <dt>round four, berberine</dt><dd>In, against not in.</dd>
+          <dt>on screen</dt><dd>Two words above each head, nothing more. Stem enzyme against flavouring. Black pepper against none.</dd>
+        </dl>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="s">0:40</div>
+      <div class="b">
+        <h4>The other person gives in</h4>
+        <p>You never recommend it. She does.</p>
+        <dl class="spec">
+          <dt>say it like this</dt><dd>Okay, fine. Forget mine. I am ordering yours.</dd>
+          <dt>why it works</dt><dd>She just watched somebody change their mind, and that is much harder to argue with than being told.</dd>
+        </dl>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="s">0:50</div>
+      <div class="b">
+        <h4>The link, flat, and nothing after it</h4>
+        <p>No sale, no code, and never a sell-out line. Theirs has one and it is the one part of this video that we do not take.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="spine">
+    <i>mid-argument</i><s>&rarr;</s><i>the glass test</i><s>&rarr;</s><i>four rounds</i><s>&rarr;</s><i>she gives in</i><s>&rarr;</s><i>link</i>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head">
+    <span class="eyebrow">the other bottle</span>
+    <h2>What you compare against, and what you must never do</h2>
+  </div>
+
+  <p>The whole format needs a second bottle in shot, and this is the part to get right, because naming another brand out loud turns an opinion into a claim that somebody can come after us for.</p>
+
+  <div class="note">
+    <span class="eyebrow">never</span>
+    <p>Do not say another brand's name, do not show its label, and do not peel the label off and leave the bottle recognisable. Do not say another product does not work.</p>
+  </div>
+
+  <div class="note hi">
+    <span class="eyebrow">instead</span>
+    <p>Compare against the category and let her fill in the blank herself, because she already owns one of them. <strong>The one I took before this.</strong> <strong>The pink one everybody has.</strong> <strong>The one from the pharmacy.</strong> Hold a plain bottle with the label turned away, or just hold up your own old empty one, which is the most honest version and the one she relates to most.</p>
+  </div>
+
+  <p>And compare on what is in it, never on what it did. Pineapple flavouring against the stem enzyme is a fact about two labels. Mine worked and that one did not is a claim about two bodies, and only one of those is yours to make.</p>
+</section>
+
+<section>
+  <div class="sec-head">
+    <span class="eyebrow">before you film</span>
+    <h2>Three that matter</h2>
+  </div>
+  <div class="note">
+    <p><strong>Never against a doctor.</strong> Being told it was normal when it was not is yours to say. Saying a prescription does not work, or that you stopped going, is the line that gets a video pulled.</p>
+    <p><strong>No sell-out lines, ever.</strong> Theirs ends on one. We only say stock is low when it really is.</p>
+    <p><strong>Helps support.</strong> That is the phrase for any effect. Your own experience is yours to describe, the viewer's body is not.</p>
+  </div>
+</section>
+
+<div class="closer">
+  <blockquote>Four rounds, twenty seconds, and the only person who recommends the product is the one who lost.</blockquote>
+  <p class="sig">Breakdown 17 &middot; nuora creator library &middot; for our creators only</p>
+</div>
+
+</div>
