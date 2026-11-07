@@ -1,0 +1,618 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>The Shopping List</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,700&family=Karla:wght@300;400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+
+<style>
+:root{
+  --ground:#FBF8F4;
+  --surface:#F6EFE8;
+  --surface-2:#EFE5DB;
+  --ink:#2B2027;
+  --ink-soft:#4A3C44;
+  --muted:#78636F;
+  --line:#E8DCD1;
+  --line-strong:#D5C5B8;
+  --accent:#B02A4C;
+  --accent-ink:#8E1A38;
+  --accent-wash:rgba(176,42,76,.07);
+  --good:#216B53;
+  --good-wash:rgba(33,107,83,.08);
+}
+
+
+
+*{box-sizing:border-box}
+body{
+  margin:0;background:var(--ground);color:var(--ink);
+  font-family:"Karla",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:17px;line-height:1.62;-webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:760px;margin:0 auto;padding:0 22px 90px}
+
+h1,h2,h3,h4{font-family:"Fraunces",Georgia,serif;text-wrap:balance;margin:0;font-weight:500}
+h1{font-size:clamp(2.3rem,7.2vw,4rem);line-height:1.03;font-weight:700;letter-spacing:-.022em;font-variation-settings:"SOFT" 20,"WONK" 1}
+h2{font-size:clamp(1.46rem,3.6vw,2rem);line-height:1.14;letter-spacing:-.014em;font-weight:600}
+h3{font-size:1.16rem;line-height:1.3;font-weight:600;letter-spacing:-.006em}
+h4{font-size:.98rem;font-weight:600}
+p{margin:0 0 1.05em}
+a{color:var(--accent-ink)}
+strong{font-weight:700;color:var(--ink)}
+
+.eyebrow{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.68rem;letter-spacing:.17em;text-transform:uppercase;color:var(--muted);font-weight:500}
+.lede{font-size:1.15rem;color:var(--ink-soft);line-height:1.56}
+.quiet{color:var(--muted)}
+.mono{font-family:"IBM Plex Mono",ui-monospace,monospace;font-variant-numeric:tabular-nums}
+
+header.top{padding:58px 0 0}
+.kicker{display:flex;gap:13px;align-items:baseline;flex-wrap:wrap;margin-bottom:24px}
+.badge{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;font-weight:600;background:var(--accent);color:#fff;padding:5px 9px;border-radius:3px}
+
+
+h1 .accent{color:var(--accent);font-style:italic;font-variation-settings:"SOFT" 40,"WONK" 1}
+.subhead{margin-top:20px;max-width:56ch}
+
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(124px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);margin:34px 0 8px;border-radius:5px;overflow:hidden}
+.stat{background:var(--surface);padding:14px 15px 13px}
+.stat .n{font-family:"IBM Plex Mono",ui-monospace,monospace;font-variant-numeric:tabular-nums;font-size:1.38rem;font-weight:600;letter-spacing:-.02em;display:block;line-height:1.15}
+.stat .l{font-size:.69rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-top:5px;display:block;font-weight:500}
+.stat.hot .n{color:var(--accent)}
+.src{font-size:.78rem;color:var(--muted)}
+
+section{margin-top:56px}
+.sec-head{margin-bottom:6px}
+.sec-head .eyebrow{display:block;margin-bottom:9px}
+
+/* video */
+.player{margin:30px 0 0}
+.player video{width:100%;max-width:330px;display:block;border-radius:8px;border:1px solid var(--line);background:#000}
+.player .row{display:flex;gap:16px;align-items:center;flex-wrap:wrap;margin-top:13px}
+.btn{display:inline-block;font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.74rem;letter-spacing:.09em;text-transform:uppercase;font-weight:600;text-decoration:none;color:var(--accent-ink);border:1px solid var(--line-strong);padding:9px 15px;border-radius:4px;background:var(--surface)}
+.btn:hover{border-color:var(--accent);color:var(--accent)}
+
+.craft .v.down{color:var(--muted)}
+.sub{margin:34px 0 6px;font-size:1.2rem}
+
+.chain .q{display:block;margin-top:7px;font-family:"Fraunces",Georgia,serif;font-style:italic;font-size:.92rem;color:var(--muted);border-left:2px solid var(--line-strong);padding-left:12px}
+
+/* the chain */
+.chain{list-style:none;margin:26px 0;padding:0;counter-reset:c}
+.chain li{position:relative;padding:0 0 0 46px;margin:0 0 16px}
+.chain li::before{counter-increment:c;content:counter(c);position:absolute;left:0;top:1px;
+  width:28px;height:28px;border-radius:50%;background:var(--surface-2);border:1px solid var(--line-strong);
+  color:var(--accent);font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.78rem;font-weight:600;
+  display:flex;align-items:center;justify-content:center}
+.chain li::after{content:"";position:absolute;left:14px;top:32px;bottom:-16px;width:1px;background:var(--line)}
+.chain li:last-child::after{display:none}
+.chain b{display:block;color:var(--ink);font-size:1rem;margin-bottom:2px}
+.chain span{font-size:.94rem;line-height:1.5;color:var(--ink-soft)}
+.chain li.use::before{background:var(--accent);color:var(--ground);border-color:var(--accent)}
+.chain li.use b::after{content:"say this one";margin-left:9px;font-family:"IBM Plex Mono",ui-monospace,monospace;
+  font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);font-weight:600}
+
+/* dashboard receipt */
+.receipt{margin:26px 0 0;padding:0;display:grid;grid-template-columns:230px 1fr;gap:24px;align-items:start}
+.receipt img{width:100%;display:block;border-radius:6px;border:1px solid var(--line-strong)}
+.receipt .notes{padding-top:2px}
+.receipt .notes .eyebrow{display:block;margin-bottom:11px}
+.receipt ul{margin:0;padding:0;list-style:none;display:grid;gap:9px}
+.receipt li{font-size:.92rem;line-height:1.45;color:var(--ink-soft);padding-left:15px;position:relative}
+.receipt li::before{content:"";position:absolute;left:0;top:.62em;width:7px;height:1px;background:var(--accent)}
+.receipt li b{color:var(--ink);font-weight:700}
+.receipt figcaption{grid-column:1/-1;margin-top:4px;font-size:.8rem;color:var(--muted)}
+@media(max-width:600px){.receipt{grid-template-columns:1fr;gap:16px}.receipt img{max-width:230px}}
+
+/* scrubber */
+figure.scrub{margin:28px 0 0;padding:0}
+.track-outer{position:relative;padding-top:24px}
+.track{position:relative;height:50px;background:var(--surface);border:1px solid var(--line);border-radius:4px;overflow:hidden}
+.zone{position:absolute;top:0;bottom:0}
+.zone.hook{background:var(--accent-wash);border-right:1px solid var(--line-strong)}
+.zone.prod{background:linear-gradient(180deg,var(--accent-wash),transparent)}
+.cut{position:absolute;top:0;bottom:0;width:1px;background:var(--line-strong)}
+.cut::after{content:"";position:absolute;top:-7px;left:-2px;width:5px;height:5px;background:var(--muted);border-radius:50%}
+.pin{position:absolute;top:0;bottom:0;width:2px;background:var(--accent)}
+.zlabel{position:absolute;top:5px;font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.62rem;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);font-weight:500}
+.scrub-legend{display:flex;flex-wrap:wrap;gap:5px 20px;margin-top:13px;font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.7rem;color:var(--muted)}
+.scrub-legend b{color:var(--ink);font-weight:600}
+figcaption{margin-top:13px;font-size:.88rem;color:var(--muted);line-height:1.5}
+
+/* hook strip */
+.strip{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin:28px 0 18px}
+.shot{margin:0}
+.shot img{width:100%;display:block;border-radius:4px;border:1px solid var(--line);background:var(--surface-2)}
+.shot .t{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.65rem;color:var(--accent);margin-top:7px;display:block;font-weight:600;font-variant-numeric:tabular-nums}
+.shot .d{font-size:.77rem;color:var(--muted);line-height:1.35;display:block;margin-top:2px}
+@media(max-width:560px){.strip{grid-template-columns:repeat(2,1fr);gap:12px}}
+
+/* beats */
+.beat{display:grid;grid-template-columns:84px 1fr;gap:0 24px;padding:25px 0;border-top:1px solid var(--line)}
+.beat:first-of-type{border-top:1px solid var(--line-strong)}
+.tc{font-family:"IBM Plex Mono",ui-monospace,monospace;font-variant-numeric:tabular-nums;font-size:.81rem;font-weight:600;color:var(--accent);padding-top:.3em;letter-spacing:-.01em}
+.tc span{display:block;color:var(--muted);font-weight:400;font-size:.73rem}
+.beat-body>*:last-child{margin-bottom:0}
+.beat h3{margin-bottom:.5em}
+@media(max-width:600px){.beat{grid-template-columns:1fr;gap:0}.tc{padding-top:0;margin-bottom:9px}.tc span{display:inline;margin-left:6px}}
+
+.said{margin:0 0 1.05em;padding:11px 0 11px 17px;border-left:2px solid var(--accent);font-family:"Fraunces",Georgia,serif;font-size:1.05rem;font-style:italic;color:var(--ink-soft);line-height:1.45;font-variation-settings:"SOFT" 30}
+
+.note{background:var(--surface);border:1px solid var(--line);border-radius:5px;padding:19px 21px;margin:25px 0}
+.note>*:last-child{margin-bottom:0}
+.note .eyebrow{display:block;margin-bottom:9px}
+.note.hi{background:var(--good-wash);border-color:var(--good)}
+.note.hi .eyebrow{color:var(--good)}
+
+/* her words */
+.herwords{margin:22px 0;padding:0;list-style:none;display:grid;gap:9px}
+.herwords li{font-family:"Fraunces",Georgia,serif;font-style:italic;font-size:1.02rem;color:var(--ink-soft);padding-left:19px;position:relative;line-height:1.4}
+.herwords li::before{content:"";position:absolute;left:0;top:.62em;width:9px;height:1px;background:var(--accent)}
+.herwords li b{font-style:normal;font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.72rem;color:var(--muted);font-weight:500;display:block;margin-top:2px;letter-spacing:.04em}
+
+/* craft */
+ul.craft{list-style:none;padding:0;margin:22px 0}
+ul.craft li{display:grid;grid-template-columns:122px 1fr;gap:0 20px;align-items:baseline;padding:12px 0;border-top:1px solid var(--line)}
+ul.craft li:last-child{border-bottom:1px solid var(--line)}
+ul.craft .v{font-family:"IBM Plex Mono",ui-monospace,monospace;font-variant-numeric:tabular-nums;font-weight:600;font-size:1rem;color:var(--accent);letter-spacing:-.02em}
+ul.craft .k{font-size:.94rem;color:var(--ink-soft)}
+@media(max-width:520px){ul.craft li{grid-template-columns:1fr;gap:3px}}
+
+/* shot list */
+.plan{border:1px solid var(--line);border-radius:6px;overflow:hidden;margin:24px 0}
+.plan-head{background:var(--surface-2);padding:16px 20px;border-bottom:1px solid var(--line)}
+.plan-head h3{margin-bottom:4px}
+.plan-head p{margin:0;font-size:.88rem;color:var(--muted);line-height:1.45}
+.step{display:grid;grid-template-columns:74px 1fr;gap:0 18px;padding:16px 20px;border-top:1px solid var(--line);background:var(--surface)}
+.step:first-of-type{border-top:0}
+.step .s{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.72rem;font-weight:600;color:var(--accent);padding-top:.22em;font-variant-numeric:tabular-nums}
+.step .b>*:last-child{margin-bottom:0}
+.step h4{margin-bottom:.34em}
+.step p{margin:0 0 .55em;font-size:.95rem;color:var(--ink-soft);line-height:1.5}
+.spec{margin:.5em 0 0;padding:0}
+.spec dt{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.6rem;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--accent);font-weight:600;margin-top:11px}
+.spec dt:first-child{margin-top:2px}
+.spec dd{margin:3px 0 0;font-size:.94rem;line-height:1.52;color:var(--ink-soft)}
+.spec dd b{color:var(--ink)}
+@media(max-width:560px){.step{grid-template-columns:1fr;gap:0;padding:15px 17px}.step .s{margin-bottom:7px}}
+
+.spine{display:flex;flex-wrap:wrap;gap:7px;align-items:center;margin:20px 0 4px;font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.75rem}
+.spine i{font-style:normal;background:var(--surface-2);border:1px solid var(--line);padding:6px 10px;border-radius:3px;color:var(--ink-soft)}
+.spine s{text-decoration:none;color:var(--accent)}
+
+.closer{margin-top:60px;padding:38px 0 0;border-top:2px solid var(--accent)}
+.closer blockquote{margin:0;font-family:"Fraunces",Georgia,serif;font-size:clamp(1.3rem,3.6vw,1.8rem);line-height:1.28;font-weight:500;letter-spacing:-.015em;text-wrap:balance;font-variation-settings:"SOFT" 30,"WONK" 1}
+.sig{margin-top:20px;font-size:.85rem;color:var(--muted)}
+
+::selection{background:var(--accent);color:var(--ground)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:2px}
+</style><div class="wrap">
+
+<header class="top">
+  <div class="kicker">
+    <span class="badge">Breakdown 18</span>
+    <span class="eyebrow">nuora creator library</span>
+  </div>
+
+  <h1>He lists every bottle<br>she already bought.<br><span class="accent">Then asks why<br>there are so many.</span></h1>
+
+  <p class="lede subhead">Fifty-eight seconds, one room, one tub. He opens by naming her problems and the bottle she bought for each one, three in seven seconds. Then one question turns the whole list around. He never has to convince her she has a problem, because she has already paid for three of them. And we can make a better version of this than his, because we know exactly what our women are buying. They told us, in their own words.</p>
+
+  <p class="src">Austin Brown &middot; creatine and collagen powder &middot; 58 seconds &middot; one room, one phone, one person</p>
+</header>
+
+<section>
+  <div class="sec-head">
+    <span class="eyebrow">watch it first</span>
+    <h2>Fifty-eight seconds, then the rest of this page</h2>
+  </div>
+
+  <div class="player">
+    <video controls playsinline preload="none" poster="poster18.jpg">
+      <source src="austin.mp4" type="video/mp4">
+      Your browser cannot play this here.
+    </video>
+    <div class="row">
+      <span class="src">One note before you watch. His audience is people on weight-loss injections, and the language and the sale at the end are his. The structure is the part to take.</span>
+    </div>
+  </div>
+
+  <div class="stats">
+    <div class="stat hot"><span class="n">7 sec</span><span class="l">three problems, three bottles</span></div>
+    <div class="stat"><span class="n">0:07</span><span class="l">the one question that turns it</span></div>
+    <div class="stat"><span class="n">0:10</span><span class="l">he answers the doubt before anybody types it</span></div>
+    <div class="stat"><span class="n">3</span><span class="l">numbers on the label, one scoop</span></div>
+    <div class="stat hot"><span class="n">0:57</span><span class="l">the link, out of 0:58</span></div>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head">
+    <span class="eyebrow">the whole idea in one minute</span>
+    <h2>She already paid for the problem. He just adds it up.</h2>
+  </div>
+
+  <p>Most supplement videos spend their first half proving the problem is real. This one skips that completely. The woman watching already has three bottles on her counter, so he starts by naming them, and she recognises her own kitchen before he has said one word about his product.</p>
+
+  <ol class="chain">
+    <li><b>The shopping list</b><span>Problem, bottle. Problem, bottle. Problem, bottle. Each problem is in the words his viewer uses about herself, never a medical term, and each answer is one word.</span></li>
+    <li><b>The turn</b><span>"But then why the hell are we buying all of this separately?" One sentence and the list she was nodding along to becomes the reason to buy. He never says his product is better. He asks a question she cannot unhear.</span></li>
+    <li><b>He answers the doubt first</b><span>"Before someone says, oh, what do you know about being on the GLP? I've been on one myself." He kills the comment before it is written, and he never says one bad word about the injection she is already on.</span></li>
+    <li><b>Proof that is somebody else's</b><span>An award in his hand, two women's videos on screen, the shop page with the sold count, a research card. He barely talks over any of it.</span></li>
+    <li class="use"><b>Three numbers, one scoop, over here and over there</b><span>"Five grams of creatine, three grams of collagen peptides, one gram of taurine, and just one scoop." Then he points left and right: the creatine over here, the collagen over there. This is the beat we can do better than him, and the whole bottom half of this page is about it.</span></li>
+  </ol>
+</section>
+
+<section>
+  <div class="sec-head">
+    <span class="eyebrow">second by second</span>
+    <h2>Where everything sits</h2>
+  </div>
+
+  <div class="strip">
+    <figure class="shot"><img src="b1.jpg" alt="he turns his back to camera"><span class="t">0:01</span><span class="d">Problem one, shown on him</span></figure>
+    <figure class="shot"><img src="b2.jpg" alt="collagen research card on screen"><span class="t">0:06</span><span class="d">A research card, two seconds</span></figure>
+    <figure class="shot"><img src="b3.jpg" alt="arms open, the turn"><span class="t">0:08</span><span class="d">Why are we buying it separately?</span></figure>
+    <figure class="shot"><img src="b4.jpg" alt="holding an award"><span class="t">0:18</span><span class="d">The award, in his hand</span></figure>
+    <figure class="shot"><img src="b5.jpg" alt="two other creators on screen"><span class="t">0:26</span><span class="d">Two other women, on screen</span></figure>
+    <figure class="shot"><img src="b6.jpg" alt="label close up"><span class="t">0:30</span><span class="d">5g, 3g, 1g, read off the label</span></figure>
+    <figure class="shot"><img src="b7.jpg" alt="bed covered in supplement bottles"><span class="t">0:40</span><span class="d">Over here, over there</span></figure>
+    <figure class="shot"><img src="b8.jpg" alt="mixed drink in a glass"><span class="t">0:45</span><span class="d">It goes in whatever he drinks</span></figure>
+  </div>
+
+  <div class="beat">
+    <div class="tc">0:00<span>the list</span></div>
+    <div class="beat-body">
+      <h3>Three problems in seven seconds, one word answer each.</h3>
+      <p class="said">"GLP butt? Creatine. Starting to look flat? Creatine. Worried about your hair, nails or skin? Collagen peptides."</p>
+      <p>Every problem is the phrase his viewer says to herself in the mirror. Nobody in a doctor's office says GLP butt, and that is exactly why it lands. The answers are one word each, so the rhythm does the work and she is nodding by the second pair.</p>
+    </div>
+  </div>
+
+  <div class="beat">
+    <div class="tc">0:07<span>the turn</span></div>
+    <div class="beat-body">
+      <h3>One question and the list flips.</h3>
+      <p class="said">"But then why the hell are we buying all of this separately?"</p>
+      <p>Seven seconds ago those three bottles were her solution. Now they are her problem. He did not attack any of them, he only counted them out loud.</p>
+    </div>
+  </div>
+
+  <div class="beat">
+    <div class="tc">0:10<span>the doubt</span></div>
+    <div class="beat-body">
+      <h3>He answers the comment before it exists.</h3>
+      <p class="said">"Before someone says, oh, what do you know about being on the GLP? I've been on one myself, and let me tell you, I loved it, but I started to need support."</p>
+      <p>Two moves in one breath. He earns the right to talk about it, and he respects what she is already doing. I loved it, but. He adds to her routine, he never tells her she was wrong.</p>
+    </div>
+  </div>
+
+  <div class="beat">
+    <div class="tc">0:17<span>the proof</span></div>
+    <div class="beat-body">
+      <h3>An award, then other people.</h3>
+      <p class="said">"As the health creator of the year, I'm not just putting any supplement in my body. So I went looking for a more cost efficient support system. And I saw all these girls talking about this NeoCell stuff."</p>
+      <p>The award is in his hand, then two women's videos sit in the corner of the screen, then the shop page with the sold count and the stars. None of it is him saying it is good. And notice the motive he gives: cost efficient. Money is the reason, the product is the answer.</p>
+    </div>
+  </div>
+
+  <div class="beat">
+    <div class="tc">0:30<span>the label</span></div>
+    <div class="beat-body">
+      <h3>Three numbers and one scoop.</h3>
+      <p class="said">"It's five grams of creatine, three grams of collagen peptides, one gram of taurine, and just one scoop."</p>
+      <p>The tub fills the frame and the three numbers are printed right there on it. He says out loud what she can see, so she is checking it with her own eyes while he talks. One scoop is the whole promise.</p>
+    </div>
+  </div>
+
+  <div class="beat">
+    <div class="tc">0:37<span>over here, over there</span></div>
+    <div class="beat-body">
+      <h3>He points left, then right.</h3>
+      <p class="said">"So instead of buying the creatine over here, the collagen over there, and all these different supplements, NeoCell put the essentials together."</p>
+      <p>A picture of a bed covered in bottles pops up in the corner. That picture is the strongest frame in the video, because it is her cupboard. His is a stock photo. Yours can be your actual shelf.</p>
+    </div>
+  </div>
+
+  <div class="beat">
+    <div class="tc">0:43<span>how it fits</span></div>
+    <div class="beat-body">
+      <h3>It goes into whatever is already in his hand.</h3>
+      <p class="said">"It's completely flavorless, so I can just throw it in whatever I'm drinking, or she's drinking."</p>
+      <p>One line on how it fits into a day she already has. Or she's drinking, said off camera, tells you somebody else in the house takes it too.</p>
+    </div>
+  </div>
+
+  <div class="beat">
+    <div class="tc">0:48<span>the close</span></div>
+    <div class="beat-body">
+      <h3>The fear again, then the sale.</h3>
+      <p class="said">"On my GLP journey, the last thing I wanted to do was lose the muscle that I had."</p>
+      <p>He goes back to the fear he opened on, then a sale, stock up, check below. The sale and the stock up are the parts we leave behind.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head">
+    <span class="eyebrow">measured</span>
+    <h2>The numbers</h2>
+  </div>
+  <ul class="craft">
+    <li><span class="v">7 sec</span><span class="k">for three problems and three bottles</span></li>
+    <li><span class="v">1 word</span><span class="k">every answer in the list</span></li>
+    <li><span class="v">0:22</span><span class="k">before the tub is in his hand</span></li>
+    <li><span class="v">3</span><span class="k">numbers on the label, read off the label itself</span></li>
+    <li><span class="v">2 sec</span><span class="k">each research card stays on screen</span></li>
+    <li><span class="v">0:57</span><span class="k">before the link, out of 0:58</span></li>
+  </ul>
+</section>
+
+<section>
+  <div class="sec-head">
+    <span class="eyebrow">our data, and why ours is better</span>
+    <h2>He guessed what his viewer buys. We asked.</h2>
+  </div>
+
+  <p>Every woman who orders from us gets a short survey, and one of the questions is what other supplements do you take, and why. Austin had to guess the three bottles on his viewer's counter. We have tens of thousands of real answers, so your list does not have to be a guess.</p>
+
+  <div class="note hi">
+    <span class="eyebrow">the capsules women</span>
+    <p><strong>7,226</strong> of them named supplements they already take. <strong>1,871</strong> named four or more. And <strong>661</strong> already buy, as a separate bottle, an ingredient that is inside our capsules: <strong>371</strong> ashwagandha, <strong>289</strong> berberine. That is his creatine over here, collagen over there, almost word for word.</p>
+  </div>
+
+  <div class="note hi">
+    <span class="eyebrow">the gummies women</span>
+    <p><strong>3,583</strong> already take a probiotic. <strong>787</strong> use boric acid. <strong>364</strong> take cranberry or D-mannose. And <strong>597</strong> told us, without being asked, that what they tried worked for a while and then came back.</p>
+  </div>
+
+  <p>In their words, exactly as they typed it:</p>
+
+  <ul class="herwords">
+    <li>"Berberine, elderberry, vit C, magnesium, B12, iron"<b>capsules customer</b></li>
+    <li>"Fish oil, turmeric, multi, magnesium"<b>capsules customer</b></li>
+    <li>"Quite a few. Like magnesium, l-tryptophan, GABA, NAC, vitamin D, Neuro-Mag, and more"<b>capsules customer</b></li>
+    <li>"For bv I have tried the boric acid suppositories but it is temporary"<b>gummies customer</b></li>
+    <li>"I've done cranberry and pineapple juice, but it only helps temporarily"<b>gummies customer</b></li>
+    <li>"It worked for a while then didn't work anymore"<b>gummies customer</b></li>
+  </ul>
+
+  <div class="note">
+    <span class="eyebrow">the part that makes ours better</span>
+    <p>His list is three bottles for three problems, and his answer is a cheaper tub. Our women have four bottles for one problem that keeps coming back, and that is a much stronger question to ask out loud: why does it keep coming back? His video can only answer with a price. Ours can answer with a reason, the layer underneath that none of those bottles was made for.</p>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head">
+    <span class="eyebrow">yours, version one</span>
+    <h2>The capsules: berberine over here, ashwagandha over there</h2>
+  </div>
+
+  <div class="plan">
+    <div class="plan-head">
+      <h3>Fifty-five seconds, one person, your own shelf</h3>
+      <p>Put every gut and stress supplement you have ever bought on the counter. Labels turned away from the camera. That is your whole set.</p>
+    </div>
+
+    <div class="step">
+      <div class="s">0:00</div>
+      <div class="b">
+        <h4>The list, three pairs, her words</h4>
+        <p>Pick up one bottle per line, say the problem, say the one word, put it down.</p>
+        <dl class="spec">
+          <dt>say it like this</dt><dd>Bloated by three o'clock? Probiotic. Wired and stressed at night? Ashwagandha. Everybody online says berberine? Berberine.</dd>
+          <dt>why these three</dt><dd>They are the top of what our capsules women told us they already take. She owns at least one of them.</dd>
+          <dt>keep the body out of it</dt><dd>His opens on his back. Ours never opens on a stomach, a waistband or a scale. The bottles are the picture.</dd>
+        </dl>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="s">0:07</div>
+      <div class="b">
+        <h4>The turn, and then one more line he did not have</h4>
+        <dl class="spec">
+          <dt>say it like this</dt><dd>So why am I buying all of these separately? And why does the bloating still come back by the afternoon?</dd>
+          <dt>why the second line</dt><dd>His question is about money. Yours is about the reason, and the reason is what she has been trying to work out for two years.</dd>
+        </dl>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="s">0:12</div>
+      <div class="b">
+        <h4>Answer the doubt before the comments do</h4>
+        <dl class="spec">
+          <dt>say it like this</dt><dd>And before somebody says you don't even look bloated, you did not see me at four o'clock. The probiotic helped too, for a few weeks, every time.</dd>
+          <dt>why it works</dt><dd>His I loved it, but. You respect what she already tried, you never call it useless, and she does not have to defend her own shelf.</dd>
+        </dl>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="s">0:20</div>
+      <div class="b">
+        <h4>Proof that belongs to other people</h4>
+        <p>He had an award and a sold count. You have the women themselves, which is better.</p>
+        <dl class="spec">
+          <dt>say it like this</dt><dd>They asked thousands of women what they take, and hundreds of them were buying the berberine and the ashwagandha on their own, exactly like me.</dd>
+          <dt>or</dt><dd>Two or three real reviews on screen, two seconds each, and you keep talking over them.</dd>
+        </dl>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="s">0:28</div>
+      <div class="b">
+        <h4>The label, and the one piece her bottle is missing</h4>
+        <p>His is three numbers. Ours is three ingredients and the reason they sit together.</p>
+        <dl class="spec">
+          <dt>say it like this</dt><dd>Berberine. Black pepper, because on its own your body absorbs very little berberine. Ashwagandha. And the enzyme from the pineapple stem, which breaks the layer down first so the rest can get through.</dd>
+          <dt>show it</dt><dd>Hold the label close and point at each line as you say it. Then pick up your old berberine bottle and turn it to the light so she can see there is no black pepper on it. Label turned so no brand shows.</dd>
+          <dt>on screen</dt><dd>Two words per ingredient. Berberine. Plus black pepper. Plus stem enzyme.</dd>
+        </dl>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="s">0:38</div>
+      <div class="b">
+        <h4>Over here, over there, with your real shelf</h4>
+        <dl class="spec">
+          <dt>do it like this</dt><dd>Point left at the ashwagandha, right at the berberine, then slide the whole row of bottles off the counter into the cupboard and leave one on the counter.</dd>
+          <dt>why it is better than his</dt><dd>His is a stock photo of a bed. Yours is your own cupboard, and she has the same one.</dd>
+        </dl>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="s">0:45</div>
+      <div class="b">
+        <h4>One honest line about you</h4>
+        <dl class="spec">
+          <dt>keep it small</dt><dd>Say how you take it and one real moment. And say the first weeks felt slow, because the body took a long time to get here and it takes time to come back.</dd>
+        </dl>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="s">0:52</div>
+      <div class="b">
+        <h4>The link, flat, and nothing after it</h4>
+        <p>No sale, no stock up, no code. His ends on all three and that is the one part we never take.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="spine">
+    <i>three pairs</i><s>&rarr;</s><i>why separately?</i><s>&rarr;</s><i>the doubt</i><s>&rarr;</s><i>other women</i><s>&rarr;</s><i>the label</i><s>&rarr;</s><i>your shelf</i><s>&rarr;</s><i>link</i>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head">
+    <span class="eyebrow">yours, version two</span>
+    <h2>The gummies: the drawer nobody shows</h2>
+  </div>
+
+  <div class="plan">
+    <div class="plan-head">
+      <h3>Fifty-five seconds, one person, one drawer</h3>
+      <p>The bathroom drawer or the cupboard under the sink, where the washes and the boric acid and the cranberry live. Open it on camera. Labels turned away.</p>
+    </div>
+
+    <div class="step">
+      <div class="s">0:00</div>
+      <div class="b">
+        <h4>The list, out of the drawer</h4>
+        <p>One item out per line, one word each.</p>
+        <dl class="spec">
+          <dt>say it like this</dt><dd>Smell after the gym? A wash. Itchy again? Boric acid. Burning? Cranberry. And a probiotic, just in case.</dd>
+          <dt>why these</dt><dd>Probiotic, boric acid and cranberry are the three our gummies women named most. She will recognise her own drawer in the first five seconds.</dd>
+        </dl>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="s">0:07</div>
+      <div class="b">
+        <h4>The turn, ours is sharper than his</h4>
+        <dl class="spec">
+          <dt>say it like this</dt><dd>Four bottles in this drawer, for one problem. And it still comes back every month.</dd>
+          <dt>why it works</dt><dd>He counted three bottles for three problems. You count four for one, and she has been asking herself that exact question.</dd>
+        </dl>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="s">0:12</div>
+      <div class="b">
+        <h4>The doubt, and the respect</h4>
+        <dl class="spec">
+          <dt>say it like this</dt><dd>And before somebody says this is too much information, half of you have this exact drawer. The boric acid helped, honestly. For about a week.</dd>
+          <dt>why for about a week</dt><dd>597 of our women wrote that same sentence in their own words. You are saying what she already knows, and you are not calling her choices wrong.</dd>
+        </dl>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="s">0:20</div>
+      <div class="b">
+        <h4>The reason, in one picture</h4>
+        <p>This is where his video only had a price. Yours has a reason.</p>
+        <dl class="spec">
+          <dt>say it like this</dt><dd>Every one of these is for what you can feel. None of them is for the layer underneath. It is called biofilm, and it builds up like plaque on your teeth.</dd>
+          <dt>show it</dt><dd>Run a fingernail across the inside of a mug nobody washed properly. That film is the picture. One sentence, then move.</dd>
+        </dl>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="s">0:32</div>
+      <div class="b">
+        <h4>Close the drawer, one jar on the counter</h4>
+        <dl class="spec">
+          <dt>do it like this</dt><dd>Push the drawer shut, put the gummies on the counter, and say what they are for in one line. Helps support, never fixes or cures.</dd>
+          <dt>never say</dt><dd>Throw out your boric acid, or stop what your doctor gave you. She keeps her drawer. You only show her what is underneath it.</dd>
+        </dl>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="s">0:40</div>
+      <div class="b">
+        <h4>Your own experience, small and slow</h4>
+        <dl class="spec">
+          <dt>keep it small</dt><dd>One real moment. Day seven felt a little different, and two months in you felt like yourself. Slow is what makes it believable.</dd>
+        </dl>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="s">0:52</div>
+      <div class="b">
+        <h4>The link, flat</h4>
+        <p>No sale, no stock up, no code, no sell-out line.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="spine">
+    <i>out of the drawer</i><s>&rarr;</s><i>four for one</i><s>&rarr;</s><i>for about a week</i><s>&rarr;</s><i>the layer</i><s>&rarr;</s><i>drawer shut</i><s>&rarr;</s><i>link</i>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head">
+    <span class="eyebrow">what we leave behind</span>
+    <h2>Four parts of his video we do not copy</h2>
+  </div>
+  <div class="note">
+    <p><strong>The body as the hook.</strong> He opens on his own back. We never open on a stomach, a waistband or a before and after.</p>
+    <p><strong>The sale and the stock up.</strong> No sale, no code, no running-out line, ever.</p>
+    <p><strong>Brand names on the shelf.</strong> Every old bottle has its label turned away. You compare what is in them, never who made them.</p>
+    <p><strong>Research cards we cannot stand behind.</strong> His cards fly by in two seconds. If you put one on screen, it has to say exactly what the source says, or leave it out.</p>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head">
+    <span class="eyebrow">before you film</span>
+    <h2>Three that matter</h2>
+  </div>
+  <div class="note">
+    <p><strong>Never against a doctor.</strong> Being told it was normal when it was not is yours to say. Saying a prescription does not work, or telling her to stop one, is the line that gets a video pulled.</p>
+    <p><strong>Helps support.</strong> That is the phrase for any effect. Your own experience is yours to describe, the viewer's body is not.</p>
+    <p><strong>No weight promises.</strong> Bloated by four o'clock is yours to say. A number on a scale is not.</p>
+  </div>
+</section>
+
+<div class="closer">
+  <blockquote>Three bottles, one question, and she does the maths herself.</blockquote>
+  <p class="sig">Breakdown 18 &middot; nuora creator library &middot; for our creators only</p>
+</div>
+
+</div>
